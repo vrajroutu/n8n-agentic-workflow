@@ -15,6 +15,9 @@ The workflow is designed to process incoming chat messages and perform the follo
    - **Create Event**: Adds a new event to Google Calendar.
 4. **Response**: Finalizes the workflow by sending a manual response.
 
+<img width="1317" alt="Screenshot 2025-01-25 at 2 11 12 PM" src="https://github.com/user-attachments/assets/99916bca-fe99-4fc6-b279-444795e0ca74" />
+
+
 ## Workflow JSON
 
 You can import this workflow into your n8n instance by using the provided `workflow.json` file.
