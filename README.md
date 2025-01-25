@@ -72,6 +72,3 @@ If you have ideas for improving this workflow or would like to contribute, feel 
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 For more information on n8n workflows, visit n8n.io.
-```
-
-Let me know if you need any further adjustments or additional sections!
