@@ -31,7 +31,7 @@ You can import this workflow into your n8n instance by using the provided `workf
 
 2. Navigate to your n8n instance.
 3. Click on the “Import” button in the workflow view.
-4. Select the workflow.json file from this repository.
+4. Select the oai_agents.json file from this repository.
 
 ## Prerequisites
 
