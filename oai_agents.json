@@ -1,0 +1,256 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "144db4d4-799f-4a7c-96e8-0068c1fdf134",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -60,
+        760
+      ],
+      "webhookId": "5b04dea3-1a5d-4ac5-9866-8d3af35e9e7f"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        500,
+        760
+      ],
+      "id": "882b9588-2330-44b6-9d4f-bc1bd316d905",
+      "name": "Tools Agent"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $fromAI(\"emailAddress\") }}",
+        "subject": "={{ $fromAI(\"subject\") }}",
+        "emailType": "text",
+        "message": "={{ $fromAI(\"emailBody\") }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        660,
+        1020
+      ],
+      "id": "c5c4ad3f-63de-4ce4-bc10-659aa85aee8b",
+      "name": "Send Email Tool",
+      "webhookId": "59161f12-3751-4c7d-aff3-8ecf362c6524",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5mAAeSAFXo68zGs3",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "nateherk88@gmail.com",
+          "mode": "list",
+          "cachedResultName": "nateherk88@gmail.com"
+        },
+        "start": "={{ $fromAI(\"startTime\") }}",
+        "end": "={{ $fromAI(\"endTime\") }}",
+        "additionalFields": {
+          "summary": "={{ $fromAI(\"eventTitle\") }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.2,
+      "position": [
+        820,
+        1020
+      ],
+      "id": "487c4db9-5d6f-420f-9168-8c80a6b8d6a1",
+      "name": "Create Event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "wnalD4YfdjEktRAZ",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        1020
+      ],
+      "id": "dd29b21b-59af-4e5d-b400-ea8f37792421",
+      "name": "GPT-4o Mini",
+      "credentials": {
+        "openAiApi": {
+          "id": "E5HXBcgx61p48FHm",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "236239aa-13b2-432c-88ae-ab48503e1808",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        860,
+        760
+      ],
+      "id": "39ec955f-5faa-43b1-9f41-4a64bd322736",
+      "name": "Response"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=# Overview  \nYou are an AI agent responsible for creating clear and actionable prompts that guide a personal assistant in completing assigned tasks.  \n\n## Context  \n- The agent does not use tools or external resources.  \n- The focus is on providing concise, step-by-step instructions that the personal assistant can follow directly.  \n- Tasks may vary in complexity, but the instructions should remain simple and unambiguous.  \n\n## Instructions  \n1. Receive the task or goal from the user.  \n2. Break down the task into logical, sequential steps that are easy to follow.  \n3. Ensure each step is actionable and includes sufficient detail to avoid confusion.  \n4. Specify any required context or dependencies in the instructions.  \n5. Review the prompt to ensure clarity and completeness before outputting it.  \n\n## Examples  \n- Input: \"Schedule a doctor's appointment for next week.\"  \n- Output:  \n  1. Check the doctor's availability for next week.  \n  2. Choose a time that works with the existing schedule.  \n  3. Call the doctor's office or use the online booking system to make the appointment.  \n  4. Confirm the appointment and note it in the calendar.  \n\n- Input: \"Prepare for John's birthday party.\"  \n- Output:  \n  1. Decide on a date and time for the party.  \n  2. Create a guest list.  \n  3. Purchase decorations and set them up before the party.  \n  4. Arrange for food and drinks.  \n  5. Send out invitations and confirm RSVPs.  \n\n## SOP (Standard Operating Procedure)  \n1. Listen to the user’s task or goal.  \n2. Break the task into actionable steps, ensuring logical order and clarity.  \n3. Include any relevant details or context to avoid ambiguity.  \n4. Review and refine the prompt to ensure it is complete and easy to understand.  \n5. Output the finalized prompt for the personal assistant to follow.  \n\n## Final Notes  \n- Always ensure the instructions are as simple and clear as possible.  \n- Avoid including unnecessary information or overly complex phrasing.  \n- Focus on delivering a ready-to-follow plan without requiring further input.  \n- Here is today's date/time: {{ $now }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        140,
+        760
+      ],
+      "id": "775891b0-6123-4730-8703-fd560ff4e498",
+      "name": "OpenAI Planner"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        1000
+      ],
+      "id": "d015d67b-ba86-464b-aaaf-77e88ba8bfd2",
+      "name": "openai",
+      "credentials": {
+        "openAiApi": {
+          "id": "E5HXBcgx61p48FHm",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Planner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tools Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Event": {
+      "ai_tool": [
+        [
+          {
+            "node": "Tools Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4o Mini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Tools Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tools Agent": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Planner": {
+      "main": [
+        [
+          {
+            "node": "Tools Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "openai": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "OpenAI Planner",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "10e0be7c-7ccd-4c27-a7ce-3574c0aff936",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b3bb41ef2405f52ee8879e0ab312af565e1053332f63a743f46fc16ce75ecc4d"
+  },
+  "id": "esPYhXTIgZ2dWV6A",
+  "tags": []
+}
